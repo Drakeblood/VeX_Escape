@@ -4,8 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "ObjectPool.h"
 #include "VEXObjectPoolingComponent.generated.h"
 
+UENUM(BlueprintType)
+enum class EVEXItemType : uint8
+{
+	Coin = 0,
+	Mine = 1,
+	Turret = 2,
+	LaserBlocks = 3,
+
+	END
+};
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class VEX_ESCAPE_API UVEXObjectPoolingComponent : public UActorComponent
@@ -13,16 +24,11 @@ class VEX_ESCAPE_API UVEXObjectPoolingComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
+	
 	UVEXObjectPoolingComponent();
 
-protected:
-	// Called when the game starts
-	virtual void BeginPlay() override;
+private:
 
-public:	
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+	TMap<EVEXItemType, UObjectPool*> ObjectPools;
 
-		
 };
