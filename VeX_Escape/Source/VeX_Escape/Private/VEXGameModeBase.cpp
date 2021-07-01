@@ -2,4 +2,9 @@
 
 
 #include "VEXGameModeBase.h"
+#include "Components/VEXSectorManagerComponent.h"
 
+AVEXGameModeBase::AVEXGameModeBase()
+{
+	VEXSectorManagerComponent = CreateDefaultSubobject<UVEXSectorManagerComponent>(FName("VEXSectorManagerComponent"));
+}
