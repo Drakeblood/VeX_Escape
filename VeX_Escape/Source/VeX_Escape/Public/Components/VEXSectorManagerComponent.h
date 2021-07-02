@@ -19,10 +19,10 @@ public:
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cube")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cube", DisplayName = "CubeDimensions (Odd numbers)")
 		FIntVector CubeDimensions;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sector")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
 		FVector SectorExtent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
@@ -35,7 +35,7 @@ private:
 	
 	TArray<TArray<TArray<AActor*>>> Sectors;
 
-	FVector SectorSpawnPoint;
+	FVector SectorSpawnPoint, SectorStartSpawnPoint, DistanceBetweenSectors;
 
 	void InitSectorsArray();
 	void SpawnInitialSectors();

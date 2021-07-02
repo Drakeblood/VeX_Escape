@@ -19,8 +19,8 @@ void UVEXSectorManagerComponent::BeginPlay()
 
 	InitSectorsArray();
 	
-	SectorSpawnPoint.Y = SectorExtent.Y * -2;
-	SectorSpawnPoint.Z = SectorExtent.Z * -2;
+	DistanceBetweenSectors = SectorExtent * 2;
+	SectorStartSpawnPoint = FVector(0.f, DistanceBetweenSectors.Y * (-(CubeDimensions.Y / 2)), DistanceBetweenSectors.Z * (-(CubeDimensions.Z / 2)));
 
 	SpawnInitialSectors();
 }
@@ -40,18 +40,6 @@ void UVEXSectorManagerComponent::InitSectorsArray()
 			Sectors[i][j].SetNum(CubeDimensions.Z);
 		}
 	}
-
-	/*for (int i = 0; i < CubeDimensions.X; i++)
-	{
-		for (int j = 0; j < CubeDimensions.Y; j++)
-		{
-			for (int k = 0; k < CubeDimensions.Z; k++)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("%s : NUM: %s"), *FVector(i + 1, j + 1, k + 1).ToString(),
-					*FVector(Sectors.Num(), Sectors[i].Num(), Sectors[i][j].Num()).ToString())
-			}
-		}
-	}*/
 }
 
 void UVEXSectorManagerComponent::SpawnInitialSectors()
@@ -60,21 +48,21 @@ void UVEXSectorManagerComponent::SpawnInitialSectors()
 
 	for (int i = 0; i < CubeDimensions.X; i++)
 	{
-		SectorSpawnPoint.Y = SectorExtent.Y * -2;
+		SectorSpawnPoint.Y = SectorStartSpawnPoint.Y;
 
 		for (int j = 0; j < CubeDimensions.Y; j++)
 		{
-			SectorSpawnPoint.Z = SectorExtent.Z * -2;
+			SectorSpawnPoint.Z = SectorStartSpawnPoint.Z;
 
 			for (int k = 0; k < CubeDimensions.Z; k++)
 			{
-				Sectors[i][j][k] = GetWorld()->SpawnActor<AActor>(SectorClass, SectorSpawnPoint, FRotator());
-				SectorSpawnPoint.Z += SectorExtent.Z * 2;
+				Sectors[i][j][k] = GetWorld()->SpawnActor<AActor>(SectorClass, SectorSpawnPoint, FRotator(0.f));
+				SectorSpawnPoint.Z += DistanceBetweenSectors.Z;
 			}
 
-			SectorSpawnPoint.Y += SectorExtent.Y * 2;
+			SectorSpawnPoint.Y += DistanceBetweenSectors.Y;
 		}
 
-		SectorSpawnPoint.X += SectorExtent.X * 2;
+		SectorSpawnPoint.X += DistanceBetweenSectors.X;
 	}
 }
