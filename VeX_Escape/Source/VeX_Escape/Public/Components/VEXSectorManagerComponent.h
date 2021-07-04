@@ -7,6 +7,7 @@
 #include "Components/BoxComponent.h"
 #include "VEXSectorManagerComponent.generated.h"
 
+class AVEXWallBase;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class VEX_ESCAPE_API UVEXSectorManagerComponent : public UActorComponent
@@ -19,14 +20,14 @@ public:
 
 protected:
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cube", DisplayName = "CubeDimensions (Odd numbers)")
-		FIntVector CubeDimensions;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall")
+		TSubclassOf<AVEXWallBase> WallClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cube")
+		int WallsNumber;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
-		FVector SectorExtent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TSubclassOf<AActor> SectorClass;
+		float WallXExtent;
 	
 	virtual void BeginPlay() override;
 
@@ -39,14 +40,8 @@ protected:
 
 private:
 	
-	TArray<TArray<TArray<AActor*>>> Sectors;
-
-	FVector SectorSpawnPoint, DistanceBetweenSectors;
-	float SectorStartSpawnPointY, SectorStartSpawnPointZ;
+	TArray<AVEXWallBase*> Walls;
 
 	int YDisplacementOrder, ZDisplacementOrder;
-
-	void InitSectorsArray();
-	void SpawnInitialSectors();
 		
 };
