@@ -10,7 +10,9 @@ UVEXSectorManagerComponent::UVEXSectorManagerComponent()
 
 	CubeDimensions = FIntVector(3, 3, 3);
 	SectorExtent = FVector(4000.f, 4000.f, 2000.f);
-	SectorSpawnPoint = FVector(0.f);
+	SectorSpawnPoint.X = 0.f;
+	YDisplacementOrder = 0;
+	ZDisplacementOrder = 0;
 }
 
 void UVEXSectorManagerComponent::BeginPlay()
@@ -20,9 +22,36 @@ void UVEXSectorManagerComponent::BeginPlay()
 	InitSectorsArray();
 	
 	DistanceBetweenSectors = SectorExtent * 2;
-	SectorStartSpawnPoint = FVector(0.f, DistanceBetweenSectors.Y * (-(CubeDimensions.Y / 2)), DistanceBetweenSectors.Z * (-(CubeDimensions.Z / 2)));
+	SectorStartSpawnPointY = DistanceBetweenSectors.Y * (-(CubeDimensions.Y / 2));
+	SectorStartSpawnPointZ = DistanceBetweenSectors.Z * (-(CubeDimensions.Z / 2));
 
 	SpawnInitialSectors();
+}
+
+void UVEXSectorManagerComponent::Displacement()
+{
+
+}
+
+void UVEXSectorManagerComponent::ChangeDisplacementOrder(int YDisplacement, int ZDisplacement)
+{
+	if (YDisplacement != 0)
+	{
+		YDisplacementOrder += YDisplacement;
+	}
+	else
+	{
+		YDisplacementOrder = 0;
+	}
+
+	if (ZDisplacement != 0)
+	{
+		ZDisplacementOrder += ZDisplacement;
+	}
+	else
+	{
+		ZDisplacementOrder = 0;
+	}
 }
 
 void UVEXSectorManagerComponent::InitSectorsArray()
@@ -48,11 +77,11 @@ void UVEXSectorManagerComponent::SpawnInitialSectors()
 
 	for (int i = 0; i < CubeDimensions.X; i++)
 	{
-		SectorSpawnPoint.Y = SectorStartSpawnPoint.Y;
+		SectorSpawnPoint.Y = SectorStartSpawnPointY;
 
 		for (int j = 0; j < CubeDimensions.Y; j++)
 		{
-			SectorSpawnPoint.Z = SectorStartSpawnPoint.Z;
+			SectorSpawnPoint.Z = SectorStartSpawnPointZ;
 
 			for (int k = 0; k < CubeDimensions.Z; k++)
 			{

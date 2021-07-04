@@ -30,12 +30,21 @@ protected:
 	
 	virtual void BeginPlay() override;
 
+	UFUNCTION(BlueprintCallable)
+		void Displacement();
+
+	UFUNCTION(BlueprintCallable)
+		void ChangeDisplacementOrder(int YDisplacement, int ZDisplacement);
+
 
 private:
 	
 	TArray<TArray<TArray<AActor*>>> Sectors;
 
-	FVector SectorSpawnPoint, SectorStartSpawnPoint, DistanceBetweenSectors;
+	FVector SectorSpawnPoint, DistanceBetweenSectors;
+	float SectorStartSpawnPointY, SectorStartSpawnPointZ;
+
+	int YDisplacementOrder, ZDisplacementOrder;
 
 	void InitSectorsArray();
 	void SpawnInitialSectors();
