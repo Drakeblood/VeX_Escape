@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "VEXSectorBase.h"
 #include "VEXWallBase.generated.h"
 
 class UBoxComponent;
@@ -35,13 +36,16 @@ protected:
 		FVector SectorExtent;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TSubclassOf<AActor> SectorClass;
+		TSubclassOf<AVEXSectorBase> SectorClass;
 
 	virtual void BeginPlay() override;
 
-private:
+	UFUNCTION()
+	void OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	TArray<TArray<AActor*>> Sectors;
+private:
+	
+	TArray<TArray<AVEXSectorBase*>> Sectors;
 
 	FVector SectorSpawnLocation;
 
