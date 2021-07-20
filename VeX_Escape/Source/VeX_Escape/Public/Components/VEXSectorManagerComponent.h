@@ -31,17 +31,9 @@ protected:
 	
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable)
-		void Displacement();
-
-	UFUNCTION(BlueprintCallable)
-		void ChangeDisplacementOrder(int YDisplacement, int ZDisplacement);
-
-
 private:
 	
 	TArray<AVEXWallBase*> Walls;
 
-	int YDisplacementOrder, ZDisplacementOrder;
-		
+	
 };

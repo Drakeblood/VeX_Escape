@@ -3,11 +3,10 @@
 
 #include "VEXSectorBase.h"
 #include "Components/BoxComponent.h"
+#include "VEXWallBase.h"
 
-// Sets default values
 AVEXSectorBase::AVEXSectorBase()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
 	Root = CreateDefaultSubobject<USceneComponent>(FName("Root"));
@@ -19,23 +18,23 @@ AVEXSectorBase::AVEXSectorBase()
 	SectorBox->OnComponentBeginOverlap.AddDynamic(this, &AVEXSectorBase::OnSectorBoxBeginOverlap);
 }
 
-// Called when the game starts or when spawned
 void AVEXSectorBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
 void AVEXSectorBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void AVEXSectorBase::OnSectorBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("SECTOR_BEGIN_OVERLAP"))
+	if (auto Wall = Cast<AVEXWallBase>(GetAttachParentActor()))
+	{
+		Wall->ChangeDisplacementOrder(YDisplacementOrder, ZDisplacementOrder);
+	}
 }
 
 void AVEXSectorBase::SetYDisplacementOrder(int NewYDisplacementOrder)

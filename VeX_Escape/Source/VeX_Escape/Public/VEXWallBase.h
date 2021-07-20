@@ -18,6 +18,9 @@ public:
 
 	AVEXWallBase();
 
+	UFUNCTION(BlueprintCallable)
+		void ChangeDisplacementOrder(int YDisplacement, int ZDisplacement);
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
@@ -38,7 +41,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TSubclassOf<AVEXSectorBase> SectorClass;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int YDisplacementOrder;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int ZDisplacementOrder;
+
 	virtual void BeginPlay() override;
+
+	UFUNCTION(BlueprintCallable)
+		void Displacement();
 
 	UFUNCTION()
 	void OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

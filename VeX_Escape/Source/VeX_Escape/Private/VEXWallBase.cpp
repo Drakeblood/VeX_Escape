@@ -42,6 +42,33 @@ void AVEXWallBase::BeginPlay()
 void AVEXWallBase::OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("WALL_BEGIN_OVERLAP"))
+	Displacement();
+}
+
+void AVEXWallBase::Displacement()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Y: %i, Z: %i"), YDisplacementOrder, ZDisplacementOrder)
+}
+
+void AVEXWallBase::ChangeDisplacementOrder(int YDisplacement, int ZDisplacement)
+{
+	if (YDisplacement != 0)
+	{
+		YDisplacementOrder += YDisplacement;
+	}
+	else
+	{
+		YDisplacementOrder = 0;
+	}
+
+	if (ZDisplacement != 0)
+	{
+		ZDisplacementOrder += ZDisplacement;
+	}
+	else
+	{
+		ZDisplacementOrder = 0;
+	}
 }
 
 void AVEXWallBase::InitSectorArray()
@@ -85,11 +112,11 @@ void AVEXWallBase::SpawnSectors()
 
 			if (j < ZCenter)
 			{
-				Sectors[i][j]->SetZDisplacementOrder(1);
+				Sectors[i][j]->SetZDisplacementOrder(-1);
 			}
 			else if (j > ZCenter)
 			{
-				Sectors[i][j]->SetZDisplacementOrder(-1);
+				Sectors[i][j]->SetZDisplacementOrder(1);
 			}
 			else
 			{

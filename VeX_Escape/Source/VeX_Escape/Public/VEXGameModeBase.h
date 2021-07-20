@@ -20,6 +20,8 @@ public:
 
 	AVEXGameModeBase();
 
+	FORCEINLINE UVEXSectorManagerComponent* GetVEXSectorManagerComponent() { return VEXSectorManagerComponent; }
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

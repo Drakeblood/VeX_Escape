@@ -11,8 +11,6 @@ UVEXSectorManagerComponent::UVEXSectorManagerComponent()
 
 	WallXExtent = 4000.f;
 	WallsNumber = 10;
-	YDisplacementOrder = 0;
-	ZDisplacementOrder = 0;
 }
 
 void UVEXSectorManagerComponent::BeginPlay()
@@ -25,31 +23,5 @@ void UVEXSectorManagerComponent::BeginPlay()
 		{
 			Walls.Add(GetWorld()->SpawnActor<AVEXWallBase>(WallClass, FVector(i * WallXExtent * 2, 0.f, 0.f), FRotator(0.f)));
 		}
-	}
-}
-
-void UVEXSectorManagerComponent::Displacement()
-{
-
-}
-
-void UVEXSectorManagerComponent::ChangeDisplacementOrder(int YDisplacement, int ZDisplacement)
-{
-	if (YDisplacement != 0)
-	{
-		YDisplacementOrder += YDisplacement;
-	}
-	else
-	{
-		YDisplacementOrder = 0;
-	}
-
-	if (ZDisplacement != 0)
-	{
-		ZDisplacementOrder += ZDisplacement;
-	}
-	else
-	{
-		ZDisplacementOrder = 0;
 	}
 }
