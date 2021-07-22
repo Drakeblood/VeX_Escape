@@ -20,6 +20,9 @@ public:
 
 	void Displacement();
 
+	UFUNCTION(BlueprintCallable)
+		void ChangeDisplacementOrder(int YDisplacement, int ZDisplacement);
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall")
@@ -30,6 +33,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
 		float WallXExtent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int YDisplacementOrder;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		int ZDisplacementOrder;
 	
 	virtual void BeginPlay() override;
 
@@ -38,5 +47,6 @@ private:
 	UPROPERTY()
 	TArray<AVEXWallBase*> Walls;
 
-	
+	int XDisplacementIterator;
+	float NextWallXLocation;
 };

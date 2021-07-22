@@ -9,6 +9,17 @@
 
 class UBoxComponent;
 
+USTRUCT()
+struct FDisplacementPoints
+{
+	GENERATED_BODY()
+
+	FVector TopDisplacementPoint;
+	FVector RightDisplacementPoint;
+	FVector BottomDisplacementPoint;
+	FVector LeftDisplacementPoint;
+};
+
 UCLASS()
 class VEX_ESCAPE_API AVEXWallBase : public AActor
 {
@@ -19,10 +30,7 @@ public:
 	AVEXWallBase();
 
 	UFUNCTION(BlueprintCallable)
-		void ChangeDisplacementOrder(int YDisplacement, int ZDisplacement);
-
-	UFUNCTION(BlueprintCallable)
-		void Displacement(float X);
+		void Displacement(int YDisplacementOrder, int ZDisplacementOrder, float X);
 
 protected:
 
@@ -44,12 +52,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TSubclassOf<AVEXSectorBase> SectorClass;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int YDisplacementOrder;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int ZDisplacementOrder;
-
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
@@ -60,8 +62,14 @@ private:
 	TArray<TArray<AVEXSectorBase*>> Sectors;
 
 	FVector SectorSpawnLocation;
+	FDisplacementPoints DisplacementPoints;
 
 	void InitSectorArray();
 	void SpawnSectors();
 	void SetupDisplacementTrigger();
+
+	void DisplacementTop(float X);
+	void DisplacementRight(float X);
+	void DisplacementBottom(float X);
+	void DisplacementLeft(float X);
 };

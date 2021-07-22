@@ -29,6 +29,23 @@ void AVEXWallBase::BeginPlay()
 	
 	InitSectorArray();
 	SpawnSectors();
+
+	DisplacementPoints.TopDisplacementPoint = FVector(0.f,
+		(SectorExtent.Y * 2) * (-(WallYDimension / 2)),
+		(SectorExtent.Z * 2) * ((WallZDimension / 2) + 1));
+
+	DisplacementPoints.RightDisplacementPoint = FVector(0.f,
+		(SectorExtent.Y * 2) * (((WallYDimension / 2) + 1)),
+		(SectorExtent.Z * 2) * (-(WallZDimension / 2)));
+
+	DisplacementPoints.BottomDisplacementPoint = FVector(0.f,
+		(SectorExtent.Y * 2) * (-(WallYDimension / 2)),
+		(SectorExtent.Z * 2) * (-((WallZDimension / 2) + 1)));
+
+	DisplacementPoints.LeftDisplacementPoint = FVector(0.f,
+		(SectorExtent.Y * 2) * (-((WallYDimension / 2) + 1)),
+		(SectorExtent.Z * 2) * (-(WallZDimension / 2)));
+
 	SetupDisplacementTrigger();
 
 	/*for (int i = 0; i < WallYDimension; i++)
@@ -53,113 +70,64 @@ void AVEXWallBase::OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* Overla
 	}
 }
 
-void AVEXWallBase::Displacement(float X)
+void AVEXWallBase::Displacement(int YDisplacementOrder, int ZDisplacementOrder, float X)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Y: %i, Z: %i"), YDisplacementOrder, ZDisplacementOrder);
 
-	/*
-	//UP
-	FVector NewLocation;
-	NewLocation.X = X;
-	NewLocation.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
-	NewLocation.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * ((WallZDimension / 2) + 1);
+	if (YDisplacementOrder > 0)
+	{
+		DisplacementRight(X);
+	}
+	else if (YDisplacementOrder < 0)
+	{
+		DisplacementLeft(X);
+	}
 
+	if (ZDisplacementOrder > 0)
+	{
+		DisplacementTop(X);
+	}
+	else if (ZDisplacementOrder < 0)
+	{
+		DisplacementBottom(X);
+	}
+
+	int YCenter = WallYDimension / 2, ZCenter = WallZDimension / 2;
 	for (int i = 0; i < WallYDimension; i++)
 	{
-		Sectors[i][0]->SetActorLocation(NewLocation);
-		NewLocation.Y += SectorExtent.Y * 2;
+		for (int j = 0; j < WallZDimension; j++)
+		{
+
+			if (i < YCenter)
+			{
+				Sectors[i][j]->SetYDisplacementOrder(-1);
+			}
+			else if (i > YCenter)
+			{
+				Sectors[i][j]->SetYDisplacementOrder(1);
+			}
+			else
+			{
+				Sectors[i][j]->SetYDisplacementOrder(0);
+			}
+
+			if (j < ZCenter)
+			{
+				Sectors[i][j]->SetZDisplacementOrder(-1);
+			}
+			else if (j > ZCenter)
+			{
+				Sectors[i][j]->SetZDisplacementOrder(1);
+			}
+			else
+			{
+				Sectors[i][j]->SetZDisplacementOrder(0);
+			}
+		}
 	}
-
-	for (int i = 0; i < WallYDimension; i++)
-	{
-		auto Bottom = Sectors[i][0];
-		Sectors[i].RemoveAt(0);
-		Sectors[i].Insert(Bottom, WallZDimension - 1);
-	}
-	//KONIEC UP
-	*/
-
-	/*
-	//RIGHT
-	FVector NewLocation;
-	NewLocation.X = X;
-	NewLocation.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (((WallYDimension / 2) + 1));
-	NewLocation.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
-
-	for (int i = 0; i < WallZDimension; i++)
-	{
-		Sectors[0][i]->SetActorLocation(NewLocation);
-		NewLocation.Z += SectorExtent.Z * 2;
-	}
-
-	auto First = Sectors[0];
-	Sectors.RemoveAt(0);
-	Sectors.Insert(First, WallYDimension - 1);
-	//KONIEC RIGHT
-	*/
-
-	/*
-	//DOWN
-	FVector NewLocation;
-	NewLocation.X = X;
-	NewLocation.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
-	NewLocation.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * (-((WallZDimension / 2) + 1));
-
-	for (int i = 0; i < WallYDimension; i++)
-	{
-		Sectors[i][WallZDimension - 1]->SetActorLocation(NewLocation);
-		NewLocation.Y += SectorExtent.Y * 2;
-	}
-
-	for (int i = 0; i < WallYDimension; i++)
-	{
-		auto Top = Sectors[i][WallZDimension - 1];
-		Sectors[i].RemoveAt(WallZDimension - 1);
-		Sectors[i].Insert(Top, 0);
-	}
-	//KONIEC DOWN
-	*/
-
-	/*
-	//LEFT
-	FVector NewLocation;
-	NewLocation.X = X;
-	NewLocation.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-((WallYDimension / 2) + 1));
-	NewLocation.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
-
-	for (int i = 0; i < WallZDimension; i++)
-	{
-		Sectors[WallYDimension - 1][i]->SetActorLocation(NewLocation);
-		NewLocation.Z += SectorExtent.Z * 2;
-	}
-
-	auto Last = Sectors[WallYDimension - 1];
-	Sectors.RemoveAt(WallYDimension - 1);
-	Sectors.Insert(Last, 0);
-	//KONIEC LEFT
-	*/
 }
 
-void AVEXWallBase::ChangeDisplacementOrder(int YDisplacement, int ZDisplacement)
-{
-	if (YDisplacement != 0)
-	{
-		YDisplacementOrder += YDisplacement;
-	}
-	else
-	{
-		YDisplacementOrder = 0;
-	}
 
-	if (ZDisplacement != 0)
-	{
-		ZDisplacementOrder += ZDisplacement;
-	}
-	else
-	{
-		ZDisplacementOrder = 0;
-	}
-}
 
 void AVEXWallBase::InitSectorArray()
 {
@@ -224,4 +192,82 @@ void AVEXWallBase::SetupDisplacementTrigger()
 {
 	DisplacementTrigger->SetRelativeLocation(FVector(SectorExtent.X, 0.f, 0.f));
 	DisplacementTrigger->SetBoxExtent(FVector(0.f, SectorExtent.Y * WallYDimension, SectorExtent.Z * WallZDimension));
+}
+
+void AVEXWallBase::DisplacementTop(float X)
+{
+	DisplacementPoints.TopDisplacementPoint.X = X;
+
+	for (int i = 0; i < WallYDimension; i++)
+	{
+		Sectors[i][0]->SetActorLocation(DisplacementPoints.TopDisplacementPoint);
+		DisplacementPoints.TopDisplacementPoint.Y += SectorExtent.Y * 2;
+	}
+	DisplacementPoints.TopDisplacementPoint.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
+	DisplacementPoints.TopDisplacementPoint.Z += SectorExtent.Z * 2;
+	DisplacementPoints.BottomDisplacementPoint.Z += SectorExtent.Z * 2;
+
+	for (int i = 0; i < WallYDimension; i++)
+	{
+		auto Bottom = Sectors[i][0];
+		Sectors[i].RemoveAt(0);
+		Sectors[i].Insert(Bottom, WallZDimension - 1);
+	}
+}
+
+void AVEXWallBase::DisplacementRight(float X)
+{
+	DisplacementPoints.RightDisplacementPoint.X = X;
+
+	for (int i = 0; i < WallZDimension; i++)
+	{
+		Sectors[0][i]->SetActorLocation(DisplacementPoints.RightDisplacementPoint);
+		DisplacementPoints.RightDisplacementPoint.Z += SectorExtent.Z * 2;
+	}
+	DisplacementPoints.RightDisplacementPoint.Z = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
+	DisplacementPoints.RightDisplacementPoint.Y += SectorExtent.Y * 2;
+	DisplacementPoints.LeftDisplacementPoint.Y += SectorExtent.Y * 2;
+
+	auto First = Sectors[0];
+	Sectors.RemoveAt(0);
+	Sectors.Insert(First, WallYDimension - 1);
+}
+
+void AVEXWallBase::DisplacementBottom(float X)
+{
+	DisplacementPoints.BottomDisplacementPoint.X = X;
+
+	for (int i = 0; i < WallYDimension; i++)
+	{
+		Sectors[i][WallZDimension - 1]->SetActorLocation(DisplacementPoints.BottomDisplacementPoint);
+		DisplacementPoints.BottomDisplacementPoint.Y += SectorExtent.Y * 2;
+	}
+	DisplacementPoints.BottomDisplacementPoint.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
+	DisplacementPoints.BottomDisplacementPoint.Z -= SectorExtent.Z * 2;
+	DisplacementPoints.TopDisplacementPoint.Z -= SectorExtent.Z * 2;
+
+	for (int i = 0; i < WallYDimension; i++)
+	{
+		auto Top = Sectors[i][WallZDimension - 1];
+		Sectors[i].RemoveAt(WallZDimension - 1);
+		Sectors[i].Insert(Top, 0);
+	}
+}
+
+void AVEXWallBase::DisplacementLeft(float X)
+{
+	DisplacementPoints.LeftDisplacementPoint.X = X;
+
+	for (int i = 0; i < WallZDimension; i++)
+	{
+		Sectors[WallYDimension - 1][i]->SetActorLocation(DisplacementPoints.LeftDisplacementPoint);
+		DisplacementPoints.LeftDisplacementPoint.Z += SectorExtent.Z * 2;
+	}
+	DisplacementPoints.LeftDisplacementPoint.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
+	DisplacementPoints.LeftDisplacementPoint.Y -= SectorExtent.Y * 2;
+	DisplacementPoints.RightDisplacementPoint.Y -= SectorExtent.Y * 2;
+
+	auto Last = Sectors[WallYDimension - 1];
+	Sectors.RemoveAt(WallYDimension - 1);
+	Sectors.Insert(Last, 0);
 }
