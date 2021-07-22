@@ -18,6 +18,8 @@ public:
 	
 	UVEXSectorManagerComponent();
 
+	void Displacement();
+
 protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall")
@@ -33,6 +35,7 @@ protected:
 
 private:
 	
+	UPROPERTY()
 	TArray<AVEXWallBase*> Walls;
 
 	

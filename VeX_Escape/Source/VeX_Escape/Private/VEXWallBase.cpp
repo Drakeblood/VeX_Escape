@@ -3,6 +3,8 @@
 
 #include "VEXWallBase.h"
 #include "Components/BoxComponent.h"
+#include "VEXGameModeBase.h"
+#include "Components/VEXSectorManagerComponent.h"
 
 AVEXWallBase::AVEXWallBase()
 {
@@ -42,12 +44,40 @@ void AVEXWallBase::BeginPlay()
 void AVEXWallBase::OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("WALL_BEGIN_OVERLAP"))
-	Displacement();
+	if (auto GameMode = GetWorld()->GetAuthGameMode<AVEXGameModeBase>())
+	{
+		if (auto VEXSectorManager = GameMode->GetVEXSectorManagerComponent())
+		{
+			VEXSectorManager->Displacement();
+		}
+	}
 }
 
-void AVEXWallBase::Displacement()
+void AVEXWallBase::Displacement(float X)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Y: %i, Z: %i"), YDisplacementOrder, ZDisplacementOrder)
+	//UE_LOG(LogTemp, Warning, TEXT("Y: %i, Z: %i"), YDisplacementOrder, ZDisplacementOrder);
+
+	//LEFT
+	FVector NewLocation;
+	NewLocation.X = X;
+	NewLocation.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-((WallYDimension / 2) + 1));
+	NewLocation.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
+
+	for (int i = 0; i < WallZDimension; i++)
+	{
+		Sectors[WallYDimension - 1][i]->SetActorLocation(NewLocation);
+		NewLocation.Z += SectorExtent.Z * 2;
+	}
+
+	auto Last = Sectors[WallYDimension - 1];
+	//UE_LOG(LogTemp, Warning, TEXT("C: %i, %i"), Sectors.Num(), &Sectors[0]);
+
+	Sectors.RemoveAt(WallYDimension - 1);
+	//UE_LOG(LogTemp, Warning, TEXT("C: %i, %i"), Sectors.Num(), &Sectors[0]);
+
+	Sectors.Insert(Last, 0);
+	//UE_LOG(LogTemp, Warning, TEXT("C: %i, %i"), Sectors.Num(), &Sectors[0]);
+	//KONIEC LEFT
 }
 
 void AVEXWallBase::ChangeDisplacementOrder(int YDisplacement, int ZDisplacement)

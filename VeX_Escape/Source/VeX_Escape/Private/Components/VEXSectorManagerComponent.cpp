@@ -25,3 +25,12 @@ void UVEXSectorManagerComponent::BeginPlay()
 		}
 	}
 }
+
+void UVEXSectorManagerComponent::Displacement()
+{
+	for (int i = 0; i < WallsNumber; i++)
+	{
+		Walls[i]->Displacement(i * WallXExtent * 2);
+	}
+	//UE_LOG(LogTemp, Warning, TEXT("--------------------------------------"));
+}
