@@ -57,6 +57,70 @@ void AVEXWallBase::Displacement(float X)
 {
 	//UE_LOG(LogTemp, Warning, TEXT("Y: %i, Z: %i"), YDisplacementOrder, ZDisplacementOrder);
 
+	/*
+	//UP
+	FVector NewLocation;
+	NewLocation.X = X;
+	NewLocation.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
+	NewLocation.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * ((WallZDimension / 2) + 1);
+
+	for (int i = 0; i < WallYDimension; i++)
+	{
+		Sectors[i][0]->SetActorLocation(NewLocation);
+		NewLocation.Y += SectorExtent.Y * 2;
+	}
+
+	for (int i = 0; i < WallYDimension; i++)
+	{
+		auto Bottom = Sectors[i][0];
+		Sectors[i].RemoveAt(0);
+		Sectors[i].Insert(Bottom, WallZDimension - 1);
+	}
+	//KONIEC UP
+	*/
+
+	/*
+	//RIGHT
+	FVector NewLocation;
+	NewLocation.X = X;
+	NewLocation.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (((WallYDimension / 2) + 1));
+	NewLocation.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
+
+	for (int i = 0; i < WallZDimension; i++)
+	{
+		Sectors[0][i]->SetActorLocation(NewLocation);
+		NewLocation.Z += SectorExtent.Z * 2;
+	}
+
+	auto First = Sectors[0];
+	Sectors.RemoveAt(0);
+	Sectors.Insert(First, WallYDimension - 1);
+	//KONIEC RIGHT
+	*/
+
+	/*
+	//DOWN
+	FVector NewLocation;
+	NewLocation.X = X;
+	NewLocation.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
+	NewLocation.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * (-((WallZDimension / 2) + 1));
+
+	for (int i = 0; i < WallYDimension; i++)
+	{
+		Sectors[i][WallZDimension - 1]->SetActorLocation(NewLocation);
+		NewLocation.Y += SectorExtent.Y * 2;
+	}
+
+	for (int i = 0; i < WallYDimension; i++)
+	{
+		auto Top = Sectors[i][WallZDimension - 1];
+		Sectors[i].RemoveAt(WallZDimension - 1);
+		Sectors[i].Insert(Top, 0);
+	}
+	//KONIEC DOWN
+	*/
+
+	/*
 	//LEFT
 	FVector NewLocation;
 	NewLocation.X = X;
@@ -70,14 +134,10 @@ void AVEXWallBase::Displacement(float X)
 	}
 
 	auto Last = Sectors[WallYDimension - 1];
-	//UE_LOG(LogTemp, Warning, TEXT("C: %i, %i"), Sectors.Num(), &Sectors[0]);
-
 	Sectors.RemoveAt(WallYDimension - 1);
-	//UE_LOG(LogTemp, Warning, TEXT("C: %i, %i"), Sectors.Num(), &Sectors[0]);
-
 	Sectors.Insert(Last, 0);
-	//UE_LOG(LogTemp, Warning, TEXT("C: %i, %i"), Sectors.Num(), &Sectors[0]);
 	//KONIEC LEFT
+	*/
 }
 
 void AVEXWallBase::ChangeDisplacementOrder(int YDisplacement, int ZDisplacement)
