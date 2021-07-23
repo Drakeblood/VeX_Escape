@@ -30,21 +30,13 @@ void AVEXWallBase::BeginPlay()
 	InitSectorArray();
 	SpawnSectors();
 
-	DisplacementPoints.TopDisplacementPoint = FVector(0.f,
-		(SectorExtent.Y * 2) * (-(WallYDimension / 2)),
-		(SectorExtent.Z * 2) * ((WallZDimension / 2) + 1));
+	DisplacementPoints.TopDisplacementPoint = (SectorExtent.Z * 2) * ((WallZDimension / 2) + 1);
+	DisplacementPoints.RightDisplacementPoint = (SectorExtent.Y * 2) * ((WallYDimension / 2) + 1);
+	DisplacementPoints.BottomDisplacementPoint = (SectorExtent.Z * 2) * (-((WallZDimension / 2) + 1));
+	DisplacementPoints.LeftDisplacementPoint = (SectorExtent.Y * 2) * (-((WallYDimension / 2) + 1));
 
-	DisplacementPoints.RightDisplacementPoint = FVector(0.f,
-		(SectorExtent.Y * 2) * (((WallYDimension / 2) + 1)),
-		(SectorExtent.Z * 2) * (-(WallZDimension / 2)));
-
-	DisplacementPoints.BottomDisplacementPoint = FVector(0.f,
-		(SectorExtent.Y * 2) * (-(WallYDimension / 2)),
-		(SectorExtent.Z * 2) * (-((WallZDimension / 2) + 1)));
-
-	DisplacementPoints.LeftDisplacementPoint = FVector(0.f,
-		(SectorExtent.Y * 2) * (-((WallYDimension / 2) + 1)),
-		(SectorExtent.Z * 2) * (-(WallZDimension / 2)));
+	CurrentY = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
+	CurrentZ = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
 
 	SetupDisplacementTrigger();
 
@@ -196,16 +188,15 @@ void AVEXWallBase::SetupDisplacementTrigger()
 
 void AVEXWallBase::DisplacementTop(float X)
 {
-	DisplacementPoints.TopDisplacementPoint.X = X;
-
+	auto YSpawnLocation = CurrentY;
 	for (int i = 0; i < WallYDimension; i++)
 	{
-		Sectors[i][0]->SetActorLocation(DisplacementPoints.TopDisplacementPoint);
-		DisplacementPoints.TopDisplacementPoint.Y += SectorExtent.Y * 2;
+		Sectors[i][0]->SetActorLocation(FVector(X, YSpawnLocation, DisplacementPoints.TopDisplacementPoint));
+		YSpawnLocation += SectorExtent.Y * 2;
 	}
-	DisplacementPoints.TopDisplacementPoint.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
-	DisplacementPoints.TopDisplacementPoint.Z += SectorExtent.Z * 2;
-	DisplacementPoints.BottomDisplacementPoint.Z += SectorExtent.Z * 2;
+	DisplacementPoints.TopDisplacementPoint += SectorExtent.Z * 2;
+	DisplacementPoints.BottomDisplacementPoint += SectorExtent.Z * 2;
+	CurrentZ += SectorExtent.Z * 2;
 
 	for (int i = 0; i < WallYDimension; i++)
 	{
@@ -217,16 +208,16 @@ void AVEXWallBase::DisplacementTop(float X)
 
 void AVEXWallBase::DisplacementRight(float X)
 {
-	DisplacementPoints.RightDisplacementPoint.X = X;
+	auto ZSpawnLocation = CurrentZ;
 
 	for (int i = 0; i < WallZDimension; i++)
 	{
-		Sectors[0][i]->SetActorLocation(DisplacementPoints.RightDisplacementPoint);
-		DisplacementPoints.RightDisplacementPoint.Z += SectorExtent.Z * 2;
+		Sectors[0][i]->SetActorLocation(FVector(X, DisplacementPoints.RightDisplacementPoint, ZSpawnLocation));
+		ZSpawnLocation += SectorExtent.Z * 2;
 	}
-	DisplacementPoints.RightDisplacementPoint.Z = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
-	DisplacementPoints.RightDisplacementPoint.Y += SectorExtent.Y * 2;
-	DisplacementPoints.LeftDisplacementPoint.Y += SectorExtent.Y * 2;
+	DisplacementPoints.RightDisplacementPoint += SectorExtent.Y * 2;
+	DisplacementPoints.LeftDisplacementPoint += SectorExtent.Y * 2;
+	CurrentY += SectorExtent.Y * 2;
 
 	auto First = Sectors[0];
 	Sectors.RemoveAt(0);
@@ -235,16 +226,16 @@ void AVEXWallBase::DisplacementRight(float X)
 
 void AVEXWallBase::DisplacementBottom(float X)
 {
-	DisplacementPoints.BottomDisplacementPoint.X = X;
+	auto YSpawnLocation = CurrentY;
 
 	for (int i = 0; i < WallYDimension; i++)
 	{
-		Sectors[i][WallZDimension - 1]->SetActorLocation(DisplacementPoints.BottomDisplacementPoint);
-		DisplacementPoints.BottomDisplacementPoint.Y += SectorExtent.Y * 2;
+		Sectors[i][WallZDimension - 1]->SetActorLocation(FVector(X, YSpawnLocation, DisplacementPoints.BottomDisplacementPoint));
+		YSpawnLocation += SectorExtent.Y * 2;
 	}
-	DisplacementPoints.BottomDisplacementPoint.Y = SectorSpawnLocation.Y = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
-	DisplacementPoints.BottomDisplacementPoint.Z -= SectorExtent.Z * 2;
-	DisplacementPoints.TopDisplacementPoint.Z -= SectorExtent.Z * 2;
+	DisplacementPoints.BottomDisplacementPoint -= SectorExtent.Z * 2;
+	DisplacementPoints.TopDisplacementPoint -= SectorExtent.Z * 2;
+	CurrentZ -= SectorExtent.Z * 2;
 
 	for (int i = 0; i < WallYDimension; i++)
 	{
@@ -256,16 +247,16 @@ void AVEXWallBase::DisplacementBottom(float X)
 
 void AVEXWallBase::DisplacementLeft(float X)
 {
-	DisplacementPoints.LeftDisplacementPoint.X = X;
+	auto ZSpawnLocation = CurrentZ;
 
 	for (int i = 0; i < WallZDimension; i++)
 	{
-		Sectors[WallYDimension - 1][i]->SetActorLocation(DisplacementPoints.LeftDisplacementPoint);
-		DisplacementPoints.LeftDisplacementPoint.Z += SectorExtent.Z * 2;
+		Sectors[WallYDimension - 1][i]->SetActorLocation(FVector(X, DisplacementPoints.LeftDisplacementPoint, ZSpawnLocation));
+		ZSpawnLocation += SectorExtent.Z * 2;
 	}
-	DisplacementPoints.LeftDisplacementPoint.Z = SectorSpawnLocation.Z = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
-	DisplacementPoints.LeftDisplacementPoint.Y -= SectorExtent.Y * 2;
-	DisplacementPoints.RightDisplacementPoint.Y -= SectorExtent.Y * 2;
+	DisplacementPoints.LeftDisplacementPoint -= SectorExtent.Y * 2;
+	DisplacementPoints.RightDisplacementPoint -= SectorExtent.Y * 2;
+	CurrentY -= SectorExtent.Y * 2;
 
 	auto Last = Sectors[WallYDimension - 1];
 	Sectors.RemoveAt(WallYDimension - 1);

@@ -14,10 +14,10 @@ struct FDisplacementPoints
 {
 	GENERATED_BODY()
 
-	FVector TopDisplacementPoint;
-	FVector RightDisplacementPoint;
-	FVector BottomDisplacementPoint;
-	FVector LeftDisplacementPoint;
+	float TopDisplacementPoint;
+	float RightDisplacementPoint;
+	float BottomDisplacementPoint;
+	float LeftDisplacementPoint;
 };
 
 UCLASS()
@@ -48,6 +48,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
 		FVector SectorExtent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Displacement")
+		float CurrentY;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Displacement")
+		float CurrentZ;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TSubclassOf<AVEXSectorBase> SectorClass;
