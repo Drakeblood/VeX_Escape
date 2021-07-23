@@ -2,7 +2,6 @@
 
 
 #include "VEXWallBase.h"
-#include "Components/BoxComponent.h"
 #include "VEXGameModeBase.h"
 #include "Components/VEXSectorManagerComponent.h"
 
@@ -12,10 +11,6 @@ AVEXWallBase::AVEXWallBase()
 
 	Root = CreateDefaultSubobject<USceneComponent>(FName("Root"));
 	SetRootComponent(Root);
-
-	DisplacementTrigger = CreateDefaultSubobject<UBoxComponent>(FName("DisplacementTrigger"));
-	DisplacementTrigger->SetupAttachment(Root);
-	DisplacementTrigger->OnComponentBeginOverlap.AddDynamic(this, &AVEXWallBase::OnDisplacementTriggerBeginOverlap);
 
 	WallYDimension = 5;
 	WallZDimension = 5;
@@ -38,8 +33,6 @@ void AVEXWallBase::BeginPlay()
 	CurrentY = (SectorExtent.Y * 2) * (-(WallYDimension / 2));
 	CurrentZ = (SectorExtent.Z * 2) * (-(WallZDimension / 2));
 
-	SetupDisplacementTrigger();
-
 	/*for (int i = 0; i < WallYDimension; i++)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("%i"), i)
@@ -48,18 +41,6 @@ void AVEXWallBase::BeginPlay()
 			UE_LOG(LogTemp, Warning, TEXT("Y: %i, Z: %i"), Sectors[i][j]->GetYDisplacementOrder(), Sectors[i][j]->GetZDisplacementOrder())
 		}
 	}*/
-}
-
-void AVEXWallBase::OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	//UE_LOG(LogTemp, Warning, TEXT("WALL_BEGIN_OVERLAP"))
-	if (auto GameMode = GetWorld()->GetAuthGameMode<AVEXGameModeBase>())
-	{
-		if (auto VEXSectorManager = GameMode->GetVEXSectorManagerComponent())
-		{
-			VEXSectorManager->Displacement();
-		}
-	}
 }
 
 void AVEXWallBase::Displacement(int YDisplacementOrder, int ZDisplacementOrder, float X)
@@ -119,7 +100,15 @@ void AVEXWallBase::Displacement(int YDisplacementOrder, int ZDisplacementOrder, 
 	}
 }
 
+FVector AVEXWallBase::GetWallYZExtent() const
+{
+	return FVector(0.f, SectorExtent.Y * WallYDimension, SectorExtent.Z * WallZDimension);
+}
 
+FVector AVEXWallBase::GetCenterLocation() const
+{
+	return Sectors[WallYDimension / 2][WallZDimension / 2]->GetActorLocation();
+}
 
 void AVEXWallBase::InitSectorArray()
 {
@@ -178,12 +167,6 @@ void AVEXWallBase::SpawnSectors()
 
 		SectorSpawnLocation.Y += SectorExtent.Y * 2;
 	}
-}
-
-void AVEXWallBase::SetupDisplacementTrigger()
-{
-	DisplacementTrigger->SetRelativeLocation(FVector(SectorExtent.X, 0.f, 0.f));
-	DisplacementTrigger->SetBoxExtent(FVector(0.f, SectorExtent.Y * WallYDimension, SectorExtent.Z * WallZDimension));
 }
 
 void AVEXWallBase::DisplacementTop(float X)

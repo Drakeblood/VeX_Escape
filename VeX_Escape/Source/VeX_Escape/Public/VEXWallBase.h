@@ -32,13 +32,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 		void Displacement(int YDisplacementOrder, int ZDisplacementOrder, float X);
 
+	FVector GetWallYZExtent() const;
+
+	FVector GetCenterLocation() const;
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		USceneComponent* Root;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UBoxComponent* DisplacementTrigger;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall", DisplayName = "Wall YDimension (Odd number)")
 		int WallYDimension;
@@ -60,9 +61,6 @@ protected:
 
 	virtual void BeginPlay() override;
 
-	UFUNCTION()
-	void OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
 private:
 	
 	TArray<TArray<AVEXSectorBase*>> Sectors;
@@ -72,7 +70,6 @@ private:
 
 	void InitSectorArray();
 	void SpawnSectors();
-	void SetupDisplacementTrigger();
 
 	void DisplacementTop(float X);
 	void DisplacementRight(float X);

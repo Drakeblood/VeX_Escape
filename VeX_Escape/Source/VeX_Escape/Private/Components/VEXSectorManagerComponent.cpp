@@ -2,6 +2,7 @@
 
 
 #include "Components/VEXSectorManagerComponent.h"
+#include "Components/BoxComponent.h"
 #include "VEXWallBase.h"
 
 
@@ -16,6 +17,17 @@ UVEXSectorManagerComponent::UVEXSectorManagerComponent()
 	NextWallXLocation = 0;
 }
 
+void UVEXSectorManagerComponent::OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	Displacement();
+}
+
+void UVEXSectorManagerComponent::OnDisplacementTriggerEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	auto CenterLocation = Walls[0]->GetCenterLocation();
+	DisplacementTrigger->SetActorLocation(FVector(DisplacementTrigger->GetActorLocation().X + WallXExtent * 2, CenterLocation.Y, CenterLocation.Z));
+}
+
 void UVEXSectorManagerComponent::BeginPlay()
 {
 	Super::BeginPlay();
@@ -28,11 +40,18 @@ void UVEXSectorManagerComponent::BeginPlay()
 		}
 		NextWallXLocation = WallsNumber * WallXExtent * 2;
 	}
+
+	DisplacementTrigger = GetWorld()->SpawnActor<AActor>(DisplacementTriggerClass, FVector(0.f), FRotator(0.f));
+	DisplacementTrigger->FindComponentByClass<UBoxComponent>()->OnComponentBeginOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerBeginOverlap);
+	DisplacementTrigger->FindComponentByClass<UBoxComponent>()->OnComponentEndOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerEndOverlap);
+	DisplacementTrigger->FindComponentByClass<UBoxComponent>()->SetBoxExtent(Walls[0]->GetWallYZExtent());
+	DisplacementTrigger->SetActorLocation(FVector(WallXExtent, 0.f, 0.f));
 }
 
 void UVEXSectorManagerComponent::Displacement()
 {
-	Walls[0]->SetActorLocation(FVector(NextWallXLocation, Walls[0]->GetActorLocation().Y, Walls[0]->GetActorLocation().Z));
+	auto Wall0CurrentLocation = Walls[0]->GetActorLocation();
+	Walls[0]->SetActorLocation(FVector(NextWallXLocation, Wall0CurrentLocation.Y, Wall0CurrentLocation.Z));
 	NextWallXLocation += WallXExtent * 2;
 
 	auto First = Walls[0];

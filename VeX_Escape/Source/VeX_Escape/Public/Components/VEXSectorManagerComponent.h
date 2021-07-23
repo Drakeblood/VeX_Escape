@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "Components/BoxComponent.h"
 #include "VEXSectorManagerComponent.generated.h"
 
 class AVEXWallBase;
@@ -28,6 +27,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall")
 		TSubclassOf<AVEXWallBase> WallClass;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Displacement")
+		TSubclassOf<AActor> DisplacementTriggerClass;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cube")
 		int WallsNumber;
 
@@ -39,6 +41,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		int ZDisplacementOrder;
+
+	UPROPERTY()
+		AActor* DisplacementTrigger;
+
+	UFUNCTION()
+		void OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION()
+		void OnDisplacementTriggerEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 	
 	virtual void BeginPlay() override;
 
