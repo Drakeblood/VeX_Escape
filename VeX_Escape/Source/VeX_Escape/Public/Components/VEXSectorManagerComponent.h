@@ -8,6 +8,18 @@
 
 class AVEXWallBase;
 
+USTRUCT(BlueprintType)
+struct FDisplacementOrder
+{
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Displacement Order")
+		int Y;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Displacement Order")
+		int Z;
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class VEX_ESCAPE_API UVEXSectorManagerComponent : public UActorComponent
 {
@@ -30,6 +42,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Displacement")
 		TSubclassOf<AActor> DisplacementTriggerClass;
 
+	UPROPERTY()
+		AActor* DisplacementTrigger;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cube")
 		int WallsNumber;
 
@@ -37,13 +52,7 @@ protected:
 		float WallXExtent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int YDisplacementOrder;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int ZDisplacementOrder;
-
-	UPROPERTY()
-		AActor* DisplacementTrigger;
+		FDisplacementOrder DisplacementOrder;
 
 	UFUNCTION()
 		void OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);

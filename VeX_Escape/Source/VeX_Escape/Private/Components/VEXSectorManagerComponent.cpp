@@ -14,7 +14,6 @@ UVEXSectorManagerComponent::UVEXSectorManagerComponent()
 	WallsNumber = 10;
 
 	XDisplacementIterator = 1;
-	NextWallXLocation = 0;
 }
 
 void UVEXSectorManagerComponent::OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -41,11 +40,13 @@ void UVEXSectorManagerComponent::BeginPlay()
 		NextWallXLocation = WallsNumber * WallXExtent * 2;
 	}
 
-	DisplacementTrigger = GetWorld()->SpawnActor<AActor>(DisplacementTriggerClass, FVector(0.f), FRotator(0.f));
-	DisplacementTrigger->FindComponentByClass<UBoxComponent>()->OnComponentBeginOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerBeginOverlap);
-	DisplacementTrigger->FindComponentByClass<UBoxComponent>()->OnComponentEndOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerEndOverlap);
-	DisplacementTrigger->FindComponentByClass<UBoxComponent>()->SetBoxExtent(Walls[0]->GetWallYZExtent());
-	DisplacementTrigger->SetActorLocation(FVector(WallXExtent, 0.f, 0.f));
+	DisplacementTrigger = GetWorld()->SpawnActor<AActor>(DisplacementTriggerClass, FVector(WallXExtent, 0.f, 0.f), FRotator(0.f));
+	if (auto DisplacementTriggerBoxComponent = DisplacementTrigger->FindComponentByClass<UBoxComponent>())
+	{
+		DisplacementTriggerBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerBeginOverlap);
+		DisplacementTriggerBoxComponent->OnComponentEndOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerEndOverlap);
+		DisplacementTriggerBoxComponent->SetBoxExtent(Walls[0]->GetWallYZExtent());
+	}
 }
 
 void UVEXSectorManagerComponent::Displacement()
@@ -56,11 +57,11 @@ void UVEXSectorManagerComponent::Displacement()
 
 	auto First = Walls[0];
 	Walls.RemoveAt(0);
-	Walls.Insert(First, WallsNumber - 1);
+	Walls.Emplace(First);
 	
 	for (int i = 0; i < WallsNumber; i++)
 	{
-		Walls[i]->Displacement(YDisplacementOrder, ZDisplacementOrder, (XDisplacementIterator + i) * WallXExtent * 2);
+		Walls[i]->Displacement(DisplacementOrder.Y, DisplacementOrder.Z, (XDisplacementIterator + i) * WallXExtent * 2);
 	}
 	XDisplacementIterator++;
 }
@@ -69,19 +70,19 @@ void UVEXSectorManagerComponent::ChangeDisplacementOrder(int YDisplacement, int 
 {
 	if (YDisplacement != 0)
 	{
-		YDisplacementOrder += YDisplacement;
+		DisplacementOrder.Y += YDisplacement;
 	}
 	else
 	{
-		YDisplacementOrder = 0;
+		DisplacementOrder.Y = 0;
 	}
 
 	if (ZDisplacement != 0)
 	{
-		ZDisplacementOrder += ZDisplacement;
+		DisplacementOrder.Z += ZDisplacement;
 	}
 	else
 	{
-		ZDisplacementOrder = 0;
+		DisplacementOrder.Z = 0;
 	}
 }

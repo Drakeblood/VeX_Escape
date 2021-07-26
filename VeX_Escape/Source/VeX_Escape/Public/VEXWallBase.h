@@ -9,6 +9,18 @@
 
 class UBoxComponent;
 
+USTRUCT(BlueprintType)
+struct FWallDimensions
+{
+	GENERATED_BODY()
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall Dimensions")
+	int Y;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall Dimensions")
+	int Z;
+};
+
 USTRUCT()
 struct FDisplacementPoints
 {
@@ -33,7 +45,6 @@ public:
 		void Displacement(int YDisplacementOrder, int ZDisplacementOrder, float X);
 
 	FVector GetWallYZExtent() const;
-
 	FVector GetCenterLocation() const;
 
 protected:
@@ -41,20 +52,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		USceneComponent* Root;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall", DisplayName = "Wall YDimension (Odd number)")
-		int WallYDimension;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall", DisplayName = "Wall ZDimension (Odd number)")
-		int WallZDimension;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall", DisplayName = "Wall Dimensions (Odd numbers)")
+		FWallDimensions WallDimensions;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
 		FVector SectorExtent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Displacement")
-		float CurrentY;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Displacement")
-		float CurrentZ;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 		TSubclassOf<AVEXSectorBase> SectorClass;
@@ -75,4 +77,6 @@ private:
 	void DisplacementRight(float X);
 	void DisplacementBottom(float X);
 	void DisplacementLeft(float X);
+
+	void UpdateSectorsDisplacementOrder();
 };
