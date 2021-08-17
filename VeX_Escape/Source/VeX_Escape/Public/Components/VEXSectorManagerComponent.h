@@ -32,7 +32,7 @@ public:
 	void Displacement();
 
 	UFUNCTION(BlueprintCallable)
-		void ChangeDisplacementOrder(int YDisplacement, int ZDisplacement);
+		void ChangeDisplacementOrder(FDisplacementOrder _DisplacementOrder);
 
 protected:
 

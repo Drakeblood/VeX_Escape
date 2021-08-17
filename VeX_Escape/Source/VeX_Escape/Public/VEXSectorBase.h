@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/VEXSectorManagerComponent.h"
 #include "VEXSectorBase.generated.h"
 
 class UBoxComponent;
@@ -44,10 +45,7 @@ protected:
 		UBoxComponent* SectorBox;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int YDisplacementOrder;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		int ZDisplacementOrder;
+	FDisplacementOrder DisplacementOrder;
 
 	virtual void BeginPlay() override;
 

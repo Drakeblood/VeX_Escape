@@ -66,20 +66,20 @@ void UVEXSectorManagerComponent::Displacement()
 	XDisplacementIterator++;
 }
 
-void UVEXSectorManagerComponent::ChangeDisplacementOrder(int YDisplacement, int ZDisplacement)
+void UVEXSectorManagerComponent::ChangeDisplacementOrder(FDisplacementOrder _DisplacementOrder)
 {
-	if (YDisplacement != 0)
+	if (_DisplacementOrder.Y != 0)
 	{
-		DisplacementOrder.Y += YDisplacement;
+		DisplacementOrder.Y += _DisplacementOrder.Y;
 	}
 	else
 	{
 		DisplacementOrder.Y = 0;
 	}
 
-	if (ZDisplacement != 0)
+	if (_DisplacementOrder.Z != 0)
 	{
-		DisplacementOrder.Z += ZDisplacement;
+		DisplacementOrder.Z += _DisplacementOrder.Z;
 	}
 	else
 	{

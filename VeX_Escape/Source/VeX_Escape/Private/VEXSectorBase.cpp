@@ -4,7 +4,6 @@
 #include "VEXSectorBase.h"
 #include "Components/BoxComponent.h"
 #include "VEXGameModeBase.h"
-#include "Components/VEXSectorManagerComponent.h"
 
 AVEXSectorBase::AVEXSectorBase()
 {
@@ -34,26 +33,26 @@ void AVEXSectorBase::OnSectorBoxBeginOverlap(UPrimitiveComponent* OverlappedComp
 	//UE_LOG(LogTemp, Warning, TEXT("SECTOR_BEGIN_OVERLAP"))
 	if (auto VEXGameMode = GetWorld()->GetAuthGameMode<AVEXGameModeBase>())
 	{
-		VEXGameMode->GetVEXSectorManagerComponent()->ChangeDisplacementOrder(YDisplacementOrder, ZDisplacementOrder);
+		VEXGameMode->GetVEXSectorManagerComponent()->ChangeDisplacementOrder(DisplacementOrder);
 	}
 }
 
 void AVEXSectorBase::SetYDisplacementOrder(int NewYDisplacementOrder)
 {
-	YDisplacementOrder = NewYDisplacementOrder;
+	DisplacementOrder.Y = NewYDisplacementOrder;
 }
 
 void AVEXSectorBase::SetZDisplacementOrder(int NewZDisplacementOrder)
 {
-	ZDisplacementOrder = NewZDisplacementOrder;
+	DisplacementOrder.Z = NewZDisplacementOrder;
 }
 
 int AVEXSectorBase::GetYDisplacementOrder() const
 {
-	return YDisplacementOrder;
+	return DisplacementOrder.Y;
 }
 
 int AVEXSectorBase::GetZDisplacementOrder() const
 {
-	return ZDisplacementOrder;
+	return DisplacementOrder.Z;
 }

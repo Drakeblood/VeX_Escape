@@ -22,6 +22,15 @@ struct FWallDimensions
 };
 
 USTRUCT()
+struct FNextWallDistance
+{
+	GENERATED_BODY()
+
+	float Y;
+	float Z;
+};
+
+USTRUCT()
 struct FDisplacementPoints
 {
 	GENERATED_BODY()
@@ -69,6 +78,7 @@ private:
 
 	FVector SectorSpawnLocation;
 	FDisplacementPoints DisplacementPoints;
+	FNextWallDistance NextWallDistance;
 
 	void InitSectorArray();
 	void SpawnSectors();
