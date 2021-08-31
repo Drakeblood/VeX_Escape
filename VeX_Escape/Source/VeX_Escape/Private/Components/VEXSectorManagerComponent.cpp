@@ -53,6 +53,7 @@ void UVEXSectorManagerComponent::Displacement()
 {
 	auto Wall0CurrentLocation = Walls[0]->GetActorLocation();
 	Walls[0]->SetActorLocation(FVector(NextWallXLocation, Wall0CurrentLocation.Y, Wall0CurrentLocation.Z));
+	Walls[0]->OnWallDisplacement();
 	NextWallXLocation += WallXExtent * 2;
 
 	auto First = Walls[0];

@@ -56,6 +56,8 @@ public:
 	FVector GetWallYZExtent() const;
 	FVector GetCenterLocation() const;
 
+	void OnWallDisplacement();
+
 protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)

@@ -37,6 +37,11 @@ void AVEXSectorBase::OnSectorBoxBeginOverlap(UPrimitiveComponent* OverlappedComp
 	}
 }
 
+void AVEXSectorBase::OnDisplacement()
+{
+	OnDisplacementBlueprintEvent();
+}
+
 void AVEXSectorBase::SetYDisplacementOrder(int NewYDisplacementOrder)
 {
 	DisplacementOrder.Y = NewYDisplacementOrder;
