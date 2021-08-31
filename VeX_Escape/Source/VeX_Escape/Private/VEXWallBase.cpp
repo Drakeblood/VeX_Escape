@@ -14,7 +14,7 @@ AVEXWallBase::AVEXWallBase()
 
 	WallDimensions.Y = 5;
 	WallDimensions.Z = 5;
-	SectorExtent = FVector(4000.f, 4000.f, 2000.f);
+	SectorExtent = FVector(5000.f, 5000.f, 5000.f);
 	SectorSpawnLocation.X = 0.f;
 }
 

@@ -14,7 +14,7 @@ AVEXSectorBase::AVEXSectorBase()
 
 	SectorBox = CreateDefaultSubobject<UBoxComponent>(FName("SectorBox"));
 	SectorBox->SetupAttachment(Root);
-	SectorBox->SetBoxExtent(FVector(4000.f, 4000.f, 2000.f));
+	SectorBox->SetBoxExtent(FVector(5000.f, 5000.f, 5000.f));
 	SectorBox->OnComponentBeginOverlap.AddDynamic(this, &AVEXSectorBase::OnSectorBoxBeginOverlap);
 }
 
