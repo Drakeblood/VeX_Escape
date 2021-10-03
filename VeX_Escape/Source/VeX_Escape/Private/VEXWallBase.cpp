@@ -14,7 +14,7 @@ AVEXWallBase::AVEXWallBase()
 
 	WallDimensions.Y = 5;
 	WallDimensions.Z = 5;
-	SectorExtent = FVector(4000.f, 4000.f, 2000.f);
+	SectorExtent = FVector(5000.f, 5000.f, 5000.f);
 	SectorSpawnLocation.X = 0.f;
 }
 
@@ -69,6 +69,17 @@ void AVEXWallBase::Displacement(int YDisplacementOrder, int ZDisplacementOrder, 
 	UpdateSectorsDisplacementOrder();
 }
 
+void AVEXWallBase::OnWallDisplacement()
+{
+	for(int i = 0; i < Sectors.Num(); i++)
+	{
+		for (int j = 0; j < Sectors[i].Num(); j++)
+		{
+			Sectors[i][j]->OnDisplacement();
+		}
+	}
+}
+
 FVector AVEXWallBase::GetWallYZExtent() const
 {
 	return FVector(0.f, SectorExtent.Y * WallDimensions.Y, SectorExtent.Z * WallDimensions.Z);
@@ -115,6 +126,7 @@ void AVEXWallBase::DisplacementTop(float X)
 	for (int i = 0; i < WallDimensions.Y; i++)
 	{
 		Sectors[i][0]->SetActorLocation(FVector(X, YSpawnLocation, DisplacementPoints.TopDisplacementPoint));
+		Sectors[i][0]->OnDisplacement();
 		YSpawnLocation += NextWallDistance.Y;
 	}
 	DisplacementPoints.TopDisplacementPoint += NextWallDistance.Z;
@@ -135,6 +147,7 @@ void AVEXWallBase::DisplacementRight(float X)
 	for (int i = 0; i < WallDimensions.Z; i++)
 	{
 		Sectors[0][i]->SetActorLocation(FVector(X, DisplacementPoints.RightDisplacementPoint, ZSpawnLocation));
+		Sectors[0][i]->OnDisplacement();
 		ZSpawnLocation += NextWallDistance.Z;
 	}
 	DisplacementPoints.RightDisplacementPoint += NextWallDistance.Y;
@@ -152,6 +165,7 @@ void AVEXWallBase::DisplacementBottom(float X)
 	for (int i = 0; i < WallDimensions.Y; i++)
 	{
 		Sectors[i][WallDimensions.Z - 1]->SetActorLocation(FVector(X, YSpawnLocation, DisplacementPoints.BottomDisplacementPoint));
+		Sectors[i][WallDimensions.Z - 1]->OnDisplacement();
 		YSpawnLocation += NextWallDistance.Y;
 	}
 	DisplacementPoints.BottomDisplacementPoint -= NextWallDistance.Z;
@@ -172,6 +186,7 @@ void AVEXWallBase::DisplacementLeft(float X)
 	for (int i = 0; i < WallDimensions.Z; i++)
 	{
 		Sectors[WallDimensions.Y - 1][i]->SetActorLocation(FVector(X, DisplacementPoints.LeftDisplacementPoint, ZSpawnLocation));
+		Sectors[WallDimensions.Y - 1][i]->OnDisplacement();
 		ZSpawnLocation += NextWallDistance.Z;
 	}
 	DisplacementPoints.LeftDisplacementPoint -= NextWallDistance.Y;

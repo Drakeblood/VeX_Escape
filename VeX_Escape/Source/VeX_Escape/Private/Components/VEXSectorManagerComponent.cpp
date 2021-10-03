@@ -10,7 +10,7 @@ UVEXSectorManagerComponent::UVEXSectorManagerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
-	WallXExtent = 4000.f;
+	WallXExtent = 5000.f;
 	WallsNumber = 10;
 
 	XDisplacementIterator = 1;
@@ -40,7 +40,7 @@ void UVEXSectorManagerComponent::BeginPlay()
 		NextWallXLocation = WallsNumber * WallXExtent * 2;
 	}
 
-	DisplacementTrigger = GetWorld()->SpawnActor<AActor>(DisplacementTriggerClass, FVector(WallXExtent, 0.f, 0.f), FRotator(0.f));
+	DisplacementTrigger = GetWorld()->SpawnActor<AActor>(DisplacementTriggerClass, FVector(WallXExtent * 3/*End of second wall*/, 0.f, 0.f), FRotator(0.f));
 	if (auto DisplacementTriggerBoxComponent = DisplacementTrigger->FindComponentByClass<UBoxComponent>())
 	{
 		DisplacementTriggerBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerBeginOverlap);
@@ -53,6 +53,7 @@ void UVEXSectorManagerComponent::Displacement()
 {
 	auto Wall0CurrentLocation = Walls[0]->GetActorLocation();
 	Walls[0]->SetActorLocation(FVector(NextWallXLocation, Wall0CurrentLocation.Y, Wall0CurrentLocation.Z));
+	Walls[0]->OnWallDisplacement();
 	NextWallXLocation += WallXExtent * 2;
 
 	auto First = Walls[0];
