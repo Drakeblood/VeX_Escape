@@ -3,7 +3,7 @@
 
 #include "Components/VEXSectorManagerComponent.h"
 #include "Components/BoxComponent.h"
-#include "VEXWallBase.h"
+#include "Gameplay/VEXWallBase.h"
 
 
 UVEXSectorManagerComponent::UVEXSectorManagerComponent()
