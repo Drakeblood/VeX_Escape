@@ -11,10 +11,7 @@ class VEX_ESCAPE_API AVEXStarFieldBase : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
-		UInstancedStaticMeshComponent* Star;
+protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UMaterial* StarMaterial;
@@ -23,13 +20,13 @@ public:
 		int StarAmount;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+		FVector StarFieldExtent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float StarScaleMin;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float StarScaleMax;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		FVector StarFieldExtent;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		float StarColorDistance;
@@ -43,6 +40,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		FLinearColor LinearColor2;
 
+public:
+
 	AVEXStarFieldBase();
 
+	UFUNCTION(BlueprintCallable)
+	void MakeStarField();
 };
