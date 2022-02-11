@@ -29,7 +29,10 @@ void AVEXPlayerControllerBase::OnPossess(APawn* InPawn)
 	Super::OnPossess(InPawn);
 
 	VEXFloatingPawnMovementComponentReference = GetPawn()->FindComponentByClass<UVEXFloatingPawnMovementComponent>();
-	EnableInput(this);
+	if (VEXFloatingPawnMovementComponentReference)
+	{
+		EnableInput(this);
+	}
 }
 
 void AVEXPlayerControllerBase::OnUnPossess()
@@ -42,7 +45,7 @@ void AVEXPlayerControllerBase::OnUnPossess()
 
 void AVEXPlayerControllerBase::MoveUp(float Val)
 {
-	if (Val != 0.f && VEXFloatingPawnMovementComponentReference)
+	if (Val != 0.f)
 	{
 		VEXFloatingPawnMovementComponentReference->MoveUp(Val);
 	}
@@ -50,7 +53,7 @@ void AVEXPlayerControllerBase::MoveUp(float Val)
 
 void AVEXPlayerControllerBase::MoveRight(float Val)
 {
-	if (Val != 0.f && VEXFloatingPawnMovementComponentReference)
+	if (Val != 0.f)
 	{
 		VEXFloatingPawnMovementComponentReference->MoveRight(Val);
 	}

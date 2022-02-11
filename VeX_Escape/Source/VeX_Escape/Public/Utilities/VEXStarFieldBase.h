@@ -12,7 +12,6 @@ class VEX_ESCAPE_API AVEXStarFieldBase : public AActor
 	GENERATED_BODY()
 	
 protected:
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 		UMaterial* StarMaterial;
 	
@@ -41,7 +40,6 @@ protected:
 		FLinearColor LinearColor2;
 
 public:
-
 	AVEXStarFieldBase();
 
 	UFUNCTION(BlueprintCallable)

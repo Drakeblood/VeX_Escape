@@ -4,6 +4,7 @@
 #include "Gameplay/VEXSectorBase.h"
 #include "Components/BoxComponent.h"
 #include "VEXGameModeBase.h"
+#include "VEXBlueprintFunctionLibraryBase.h"
 
 AVEXSectorBase::AVEXSectorBase()
 {
@@ -14,26 +15,29 @@ AVEXSectorBase::AVEXSectorBase()
 
 	SectorBox = CreateDefaultSubobject<UBoxComponent>(FName("SectorBox"));
 	SectorBox->SetupAttachment(Root);
-	SectorBox->SetBoxExtent(FVector(5000.f, 5000.f, 5000.f));
 	SectorBox->OnComponentBeginOverlap.AddDynamic(this, &AVEXSectorBase::OnSectorBoxBeginOverlap);
 }
 
 void AVEXSectorBase::BeginPlay()
 {
 	Super::BeginPlay();
-}
 
-void AVEXSectorBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
+	VEXSectorManagerComponentReference = UVEXBlueprintFunctionLibraryBase::GetVEXSectorManagerComponent(GetWorld());
+	if (VEXSectorManagerComponentReference)
+	{
+		SectorBox->SetBoxExtent(VEXSectorManagerComponentReference->GetSectorExtent());
+	}
 }
 
 void AVEXSectorBase::OnSectorBoxBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//UE_LOG(LogTemp, Warning, TEXT("SECTOR_BEGIN_OVERLAP"))
-	if (auto VEXGameMode = GetWorld()->GetAuthGameMode<AVEXGameModeBase>())
+	if (VEXSectorManagerComponentReference)
 	{
-		VEXGameMode->GetVEXSectorManagerComponent()->ChangeDisplacementOrder(DisplacementOrder);
+		VEXSectorManagerComponentReference->ChangeDisplacementOrder(DisplacementOrder);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Null reference of VEXSectorManagerComponentReference"));
 	}
 }
 

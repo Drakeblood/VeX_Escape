@@ -13,42 +13,42 @@ UCLASS()
 class VEX_ESCAPE_API AVEXSectorBase : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
-	
-	AVEXSectorBase();
 
-	virtual void Tick(float DeltaTime) override;
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USceneComponent* Root;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UBoxComponent* SectorBox;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FDisplacementOrder DisplacementOrder;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UVEXSectorManagerComponent* VEXSectorManagerComponentReference;
+
+public:
+	AVEXSectorBase();
 
 	void OnDisplacement();
 
 
 	UFUNCTION()
-		/**
-		* @param NewYDisplacementOrder (Left: -1, No displacement: 0, Right: 1).
-		*/
-		void SetYDisplacementOrder(int NewYDisplacementOrder);
+	/**
+	* @param NewYDisplacementOrder (Left: -1, No displacement: 0, Right: 1).
+	*/
+	void SetYDisplacementOrder(int NewYDisplacementOrder);
 
 	UFUNCTION()
-		/**
-		* @param NewZDisplacementOrder (Down: -1, No displacement: 0, Up: 1).
-		*/
-		void SetZDisplacementOrder(int NewZDisplacementOrder);
+	/**
+	* @param NewZDisplacementOrder (Down: -1, No displacement: 0, Up: 1).
+	*/
+	void SetZDisplacementOrder(int NewZDisplacementOrder);
 
 	int GetYDisplacementOrder() const;
 	int GetZDisplacementOrder() const;
 
 protected:
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		USceneComponent* Root;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UBoxComponent* SectorBox;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	FDisplacementOrder DisplacementOrder;
-
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
@@ -56,7 +56,5 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnDisplacementBlueprintEvent();
-
-private:	
 
 };

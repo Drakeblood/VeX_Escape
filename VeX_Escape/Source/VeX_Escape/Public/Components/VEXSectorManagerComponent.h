@@ -25,6 +25,35 @@ class VEX_ESCAPE_API UVEXSectorManagerComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
+protected:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall")
+	TSubclassOf<AVEXWallBase> WallClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Displacement")
+	TSubclassOf<AActor> DisplacementTriggerClass;
+
+	UPROPERTY()
+	AActor* DisplacementTrigger;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
+	FVector SectorExtent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cube")
+	int WallsNumber;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
+	float WallXExtent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FDisplacementOrder DisplacementOrder;
+
+private:
+	UPROPERTY()
+	TArray<AVEXWallBase*> Walls;
+
+	int XDisplacementIterator;
+	float NextWallXLocation;
+
 public:	
 	
 	UVEXSectorManagerComponent();
@@ -32,41 +61,17 @@ public:
 	void Displacement();
 
 	UFUNCTION(BlueprintCallable)
-		void ChangeDisplacementOrder(FDisplacementOrder _DisplacementOrder);
+	void ChangeDisplacementOrder(FDisplacementOrder _DisplacementOrder);
+
+	UFUNCTION(BlueprintPure)
+	inline FVector GetSectorExtent();
 
 protected:
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall")
-		TSubclassOf<AVEXWallBase> WallClass;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Displacement")
-		TSubclassOf<AActor> DisplacementTriggerClass;
-
-	UPROPERTY()
-		AActor* DisplacementTrigger;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Cube")
-		int WallsNumber;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
-		float WallXExtent;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		FDisplacementOrder DisplacementOrder;
-
-	UFUNCTION()
-		void OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-
-	UFUNCTION()
-		void OnDisplacementTriggerEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
-	
 	virtual void BeginPlay() override;
 
-private:
-	
-	UPROPERTY()
-	TArray<AVEXWallBase*> Walls;
+	UFUNCTION()
+	void OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	int XDisplacementIterator;
-	float NextWallXLocation;
+	UFUNCTION()
+	void OnDisplacementTriggerEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 };

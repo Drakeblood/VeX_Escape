@@ -16,14 +16,12 @@ class VEX_ESCAPE_API AVEXGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 
-public:
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+		UVEXSectorManagerComponent* VEXSectorManagerComponent;
 
+public:
 	AVEXGameModeBase();
 
-	FORCEINLINE UVEXSectorManagerComponent* GetVEXSectorManagerComponent() { return VEXSectorManagerComponent; }
-
-protected:
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UVEXSectorManagerComponent* VEXSectorManagerComponent;
+	inline UVEXSectorManagerComponent* GetVEXSectorManagerComponent();
 };
