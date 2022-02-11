@@ -8,3 +8,8 @@ AVEXGameModeBase::AVEXGameModeBase()
 {
 	VEXSectorManagerComponent = CreateDefaultSubobject<UVEXSectorManagerComponent>(FName("VEXSectorManagerComponent"));
 }
+
+inline UVEXSectorManagerComponent* AVEXGameModeBase::GetVEXSectorManagerComponent()
+{
+	return VEXSectorManagerComponent;
+}

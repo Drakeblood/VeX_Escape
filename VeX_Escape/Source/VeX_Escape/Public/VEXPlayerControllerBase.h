@@ -17,8 +17,10 @@ class VEX_ESCAPE_API AVEXPlayerControllerBase : public APlayerController
 {
 	GENERATED_BODY()
 
-public:
+private:
+	UVEXFloatingPawnMovementComponent* VEXFloatingPawnMovementComponentReference;
 
+public:
 	AVEXPlayerControllerBase();
 
 	virtual void SetupInputComponent() override;
@@ -26,13 +28,9 @@ public:
 	virtual void OnUnPossess() override;
 
 protected:
-
 	virtual void BeginPlay() override;
 
 private:
-
-	UVEXFloatingPawnMovementComponent* VEXFloatingPawnMovementComponentReference;
-
 	void MoveUp(float Val);
 	void MoveRight(float Val);
 	

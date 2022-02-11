@@ -45,13 +45,32 @@ UCLASS()
 class VEX_ESCAPE_API AVEXWallBase : public AActor
 {
 	GENERATED_BODY()
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	USceneComponent* Root;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall", DisplayName = "Wall Dimensions (Odd numbers)")
+	FWallDimensions WallDimensions;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
+	FVector SectorExtent;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<AVEXSectorBase> SectorClass;
+
+private:
+	TArray<TArray<AVEXSectorBase*>> Sectors;
+
+	FVector SectorSpawnLocation;
+	FDisplacementPoints DisplacementPoints;
+	FNextWallDistance NextWallDistance;
 	
 public:	
-
 	AVEXWallBase();
 
 	UFUNCTION(BlueprintCallable)
-		void Displacement(int YDisplacementOrder, int ZDisplacementOrder, float X);
+	void Displacement(int YDisplacementOrder, int ZDisplacementOrder, float X);
 
 	FVector GetWallYZExtent() const;
 	FVector GetCenterLocation() const;
@@ -59,29 +78,9 @@ public:
 	void OnWallDisplacement();
 
 protected:
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		USceneComponent* Root;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall", DisplayName = "Wall Dimensions (Odd numbers)")
-		FWallDimensions WallDimensions;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Sector")
-		FVector SectorExtent;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-		TSubclassOf<AVEXSectorBase> SectorClass;
-
 	virtual void BeginPlay() override;
 
 private:
-	
-	TArray<TArray<AVEXSectorBase*>> Sectors;
-
-	FVector SectorSpawnLocation;
-	FDisplacementPoints DisplacementPoints;
-	FNextWallDistance NextWallDistance;
-
 	void InitSectorArray();
 	void SpawnSectors();
 

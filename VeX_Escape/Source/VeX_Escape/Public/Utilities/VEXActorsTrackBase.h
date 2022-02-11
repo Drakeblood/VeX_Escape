@@ -14,7 +14,6 @@ class VEX_ESCAPE_API AVEXActorsTrackBase : public AActor
 	GENERATED_BODY()
 	
 protected:
-	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 		USplineComponent* SplineComponent;
 
@@ -25,7 +24,6 @@ protected:
 		int ActorsAmount;
 
 public:
-
 	AVEXActorsTrackBase();
 
 	UFUNCTION(BlueprintCallable)

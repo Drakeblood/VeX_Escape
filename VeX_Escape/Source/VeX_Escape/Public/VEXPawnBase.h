@@ -15,16 +15,7 @@ class VEX_ESCAPE_API AVEXPawnBase : public APawn
 {
 	GENERATED_BODY()
 
-public:
-
-	AVEXPawnBase();
-
-	virtual void Tick(float DeltaSeconds) override;
-	
 protected:
-
-	virtual void BeginPlay() override;
-
 	UPROPERTY(Category = "Mesh", VisibleAnywhere, BlueprintReadOnly)
 		UStaticMeshComponent* PlaneMesh;
 
@@ -37,7 +28,12 @@ protected:
 	UPROPERTY(Category = "Movement", VisibleAnywhere, BlueprintReadOnly)
 		UVEXFloatingPawnMovementComponent* VEXFloatingPawnMovement;
 
-private:
+public:
+	AVEXPawnBase();
 
+	virtual void Tick(float DeltaSeconds) override;
+	
+protected:
+	virtual void BeginPlay() override;
 
 };

@@ -14,47 +14,46 @@ class VEX_ESCAPE_API UVEXFloatingPawnMovementComponent : public UFloatingPawnMov
 {
 	GENERATED_BODY()
 
-public:
+protected:
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float ReturnTo0RotationSpeed;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float RollSpeed;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float PitchAngle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float YawAngle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float RollAngle;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float IncreaseAccelerationValue;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Movement")
+	float IncreaseAccelerationRatio;
+
+private:
+	FTimerHandle IncreaseAccelerationTimer;
+
+public:
 	UVEXFloatingPawnMovementComponent();
 
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
-		void MoveUp(float Val);
+	void MoveUp(float Val);
 
 	UFUNCTION(BlueprintCallable, Category = "Input")
-		void MoveRight(float Val);
+	void MoveRight(float Val);
 
 protected:
-
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-		float ReturnTo0RotationSpeed;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-		float RollSpeed;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-		float PitchAngle;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-		float YawAngle;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-		float RollAngle;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-		float IncreaseAccelerationValue;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Movement")
-		float IncreaseAccelerationRatio;
-
 private:
-
 	void IncreaseMaxSpeed();
-
-	FTimerHandle IncreaseAccelerationTimer;
 	
 };

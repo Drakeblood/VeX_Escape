@@ -10,6 +10,8 @@ UVEXSectorManagerComponent::UVEXSectorManagerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
 
+	SectorExtent = FVector(5000.f, 5000.f, 5000.f);
+
 	WallXExtent = 5000.f;
 	WallsNumber = 10;
 
@@ -86,4 +88,9 @@ void UVEXSectorManagerComponent::ChangeDisplacementOrder(FDisplacementOrder _Dis
 	{
 		DisplacementOrder.Z = 0;
 	}
+}
+
+inline FVector UVEXSectorManagerComponent::GetSectorExtent()
+{
+	return SectorExtent;
 }
