@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "VeX_Escape.h"
 #include "GameFramework/PlayerController.h"
 #include "VEXPlayerControllerBase.generated.h"
 

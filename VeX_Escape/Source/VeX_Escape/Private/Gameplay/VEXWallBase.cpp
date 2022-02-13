@@ -3,6 +3,7 @@
 
 #include "Gameplay/VEXWallBase.h"
 #include "VEXGameModeBase.h"
+#include "Gameplay/VEXSectorBase.h"
 #include "Components/VEXSectorManagerComponent.h"
 
 AVEXWallBase::AVEXWallBase()
@@ -33,15 +34,6 @@ void AVEXWallBase::BeginPlay()
 	InitSectorArray();
 	SpawnSectors();
 	UpdateSectorsDisplacementOrder();
-
-	/*for (int i = 0; i < WallYDimension; i++)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("%i"), i)
-		for (int j = 0; j < WallZDimension; j++)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Y: %i, Z: %i"), Sectors[i][j]->GetYDisplacementOrder(), Sectors[i][j]->GetZDisplacementOrder())
-		}
-	}*/
 }
 
 void AVEXWallBase::Displacement(int YDisplacementOrder, int ZDisplacementOrder, float X)

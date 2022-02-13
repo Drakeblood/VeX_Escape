@@ -3,6 +3,7 @@
 
 #include "Gameplay/VEXSectorBase.h"
 #include "Components/BoxComponent.h"
+#include "Components/VEXSectorManagerComponent.h"
 #include "VEXGameModeBase.h"
 #include "VEXBlueprintFunctionLibraryBase.h"
 
@@ -37,7 +38,7 @@ void AVEXSectorBase::OnSectorBoxBeginOverlap(UPrimitiveComponent* OverlappedComp
 	}
 	else
 	{
-		UE_LOG(LogTemp, Error, TEXT("Null reference of VEXSectorManagerComponentReference"));
+		UE_LOG(LogVeXEscape, Error, TEXT("Null reference of VEXSectorManagerComponentReference"));
 	}
 }
 

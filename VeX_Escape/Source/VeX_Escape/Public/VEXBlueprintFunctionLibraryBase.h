@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "VeX_Escape.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "VEXBlueprintFunctionLibraryBase.generated.h"
 

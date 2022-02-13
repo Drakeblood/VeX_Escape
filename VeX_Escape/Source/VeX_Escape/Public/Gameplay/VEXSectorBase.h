@@ -2,12 +2,24 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "VeX_Escape.h"
 #include "GameFramework/Actor.h"
-#include "Components/VEXSectorManagerComponent.h"
 #include "VEXSectorBase.generated.h"
 
 class UBoxComponent;
+class UVEXSectorManagerComponent;
+
+USTRUCT(BlueprintType)
+struct VEX_ESCAPE_API FDisplacementOrder
+{
+	GENERATED_BODY()
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Displacement Order")
+	int32 Y;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Displacement Order")
+	int32 Z;
+};
 
 UCLASS()
 class VEX_ESCAPE_API AVEXSectorBase : public AActor

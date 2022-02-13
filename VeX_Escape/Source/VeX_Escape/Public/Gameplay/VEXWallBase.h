@@ -2,44 +2,13 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "VeX_Escape.h"
 #include "GameFramework/Actor.h"
-#include "VEXSectorBase.h"
+#include "VEXTypes.h"
 #include "VEXWallBase.generated.h"
 
 class UBoxComponent;
-
-USTRUCT(BlueprintType)
-struct FWallDimensions
-{
-	GENERATED_BODY()
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall Dimensions")
-	int Y;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall Dimensions")
-	int Z;
-};
-
-USTRUCT()
-struct FNextWallDistance
-{
-	GENERATED_BODY()
-
-	float Y;
-	float Z;
-};
-
-USTRUCT()
-struct FDisplacementPoints
-{
-	GENERATED_BODY()
-
-	float TopDisplacementPoint;
-	float RightDisplacementPoint;
-	float BottomDisplacementPoint;
-	float LeftDisplacementPoint;
-};
+class AVEXSectorBase;
 
 UCLASS()
 class VEX_ESCAPE_API AVEXWallBase : public AActor
@@ -73,6 +42,8 @@ public:
 	void Displacement(int YDisplacementOrder, int ZDisplacementOrder, float X);
 
 	FVector GetWallYZExtent() const;
+
+	UFUNCTION(BlueprintCallable)
 	FVector GetCenterLocation() const;
 
 	void OnWallDisplacement();

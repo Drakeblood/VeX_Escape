@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "VeX_Escape.h"
 #include "GameFramework/GameModeBase.h"
 #include "VEXGameModeBase.generated.h"
 
@@ -17,11 +17,13 @@ class VEX_ESCAPE_API AVEXGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-		UVEXSectorManagerComponent* VEXSectorManagerComponent;
+	UVEXSectorManagerComponent* VEXSectorManagerComponent;
 
 public:
 	AVEXGameModeBase();
 
 	inline UVEXSectorManagerComponent* GetVEXSectorManagerComponent();
+	
+protected:
+	virtual void BeginPlay();
 };

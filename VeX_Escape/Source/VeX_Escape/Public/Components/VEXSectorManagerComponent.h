@@ -2,30 +2,28 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include "VeX_Escape.h"
 #include "Components/ActorComponent.h"
+#include "VEXTypes.h"
 #include "VEXSectorManagerComponent.generated.h"
 
 class AVEXWallBase;
 
-USTRUCT(BlueprintType)
-struct FDisplacementOrder
-{
-	GENERATED_BODY()
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Displacement Order")
-		int Y;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Displacement Order")
-		int Z;
-};
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDisplacement);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class VEX_ESCAPE_API UVEXSectorManagerComponent : public UActorComponent
 {
 	GENERATED_BODY()
+	
+public:
+	UPROPERTY(BlueprintAssignable)
+	FOnDisplacement OnDisplacement;
 
 protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	TArray<AVEXWallBase*> Walls;
+
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Wall")
 	TSubclassOf<AVEXWallBase> WallClass;
 
@@ -47,10 +45,11 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	FDisplacementOrder DisplacementOrder;
 
-private:
-	UPROPERTY()
-	TArray<AVEXWallBase*> Walls;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	FVEXSectorBlock SectorBlock;
 
+private:
+	
 	int XDisplacementIterator;
 	float NextWallXLocation;
 

@@ -5,7 +5,6 @@
 #include "Components/BoxComponent.h"
 #include "Gameplay/VEXWallBase.h"
 
-
 UVEXSectorManagerComponent::UVEXSectorManagerComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -16,10 +15,13 @@ UVEXSectorManagerComponent::UVEXSectorManagerComponent()
 	WallsNumber = 10;
 
 	XDisplacementIterator = 1;
+
+	SectorBlock.SetBlockExtent(5, 5, 10);
 }
 
 void UVEXSectorManagerComponent::OnDisplacementTriggerBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	OnDisplacement.Broadcast();
 	Displacement();
 }
 
@@ -43,11 +45,15 @@ void UVEXSectorManagerComponent::BeginPlay()
 	}
 
 	DisplacementTrigger = GetWorld()->SpawnActor<AActor>(DisplacementTriggerClass, FVector(WallXExtent * 3/*End of second wall*/, 0.f, 0.f), FRotator(0.f));
-	if (auto DisplacementTriggerBoxComponent = DisplacementTrigger->FindComponentByClass<UBoxComponent>())
+	if(DisplacementTrigger)
 	{
-		DisplacementTriggerBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerBeginOverlap);
-		DisplacementTriggerBoxComponent->OnComponentEndOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerEndOverlap);
-		DisplacementTriggerBoxComponent->SetBoxExtent(Walls[0]->GetWallYZExtent());
+		UBoxComponent* DisplacementTriggerBoxComponent = DisplacementTrigger->FindComponentByClass<UBoxComponent>();
+		if (DisplacementTriggerBoxComponent)
+		{
+			DisplacementTriggerBoxComponent->OnComponentBeginOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerBeginOverlap);
+			DisplacementTriggerBoxComponent->OnComponentEndOverlap.AddDynamic(this, &UVEXSectorManagerComponent::OnDisplacementTriggerEndOverlap);
+			DisplacementTriggerBoxComponent->SetBoxExtent(Walls[0]->GetWallYZExtent());
+		}
 	}
 }
 

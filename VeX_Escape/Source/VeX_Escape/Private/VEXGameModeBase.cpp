@@ -6,7 +6,14 @@
 
 AVEXGameModeBase::AVEXGameModeBase()
 {
-	VEXSectorManagerComponent = CreateDefaultSubobject<UVEXSectorManagerComponent>(FName("VEXSectorManagerComponent"));
+	
+}
+
+void AVEXGameModeBase::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	VEXSectorManagerComponent = FindComponentByClass<UVEXSectorManagerComponent>();
 }
 
 inline UVEXSectorManagerComponent* AVEXGameModeBase::GetVEXSectorManagerComponent()
